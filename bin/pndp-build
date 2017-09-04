@@ -1,0 +1,122 @@
+#!/usr/bin/env php
+<?php
+require_once(dirname(__FILE__)."/../vendor/autoload.php");
+
+use PNDP\PNDPBuild;
+
+function displayHelp($command)
+{
+	print("Usage: ".$command." [OPTION]\n\n");
+	echo <<<EOT
+Converts a given PHP file defining a Nix expression in a semi-abstract
+syntax into a Nix expression and builds it using `nix-build'
+
+Options:
+ -f, --file=FILE         Path to a PHP file composing the packages
+ -A, --attr=NAME         Name of the property to select that builds a package.
+     --format            Indicates whether to nicely format to expression (i.e.
+                         generating whitespaces) or not
+     --eval-only         Causes the tool to only generate a Nix expression
+                         without evaluating it
+     --show-trace        Causes Nix to print out a stack trace in case of Nix
+                         expression evaluation errors
+ -K, --keep-failed       Specifies that in case of a build failure, the
+                         temporary directory should not be deleted
+     --no-out-link       Do not create a symlink to the output path
+ -o, --out-link=FILE     Change the name of the symlink to the output path
+                         created from result to outlink
+ -h, --help              Shows the usage of this command
+ -v, --version           Shows the version of this command
+
+EOT;
+}
+
+function displayVersion($command)
+{
+	print($command." (pndp 0.0.1)\n\nCopyright (C) 2017 Sander van der Burg\n");
+}
+
+/* Parse command line options */
+
+$options = getopt("f:A:Ko:hv", array(
+	"file:",
+	"attr:",
+	"format",
+	"eval-only",
+	"show-trace",
+	"keep-failed",
+	"no-out-link",
+	"out-link:",
+	"help",
+	"version"
+));
+
+if($options === false)
+{
+	fwrite(STDERR, "Cannot parse the command-line options!\n");
+	exit(1);
+}
+
+/* Parse the options themselves */
+
+if(array_key_exists("h", $options) || array_key_exists("help", $options))
+{
+	displayHelp($argv[0]);
+	exit();
+}
+
+if(array_key_exists("v", $options) || array_key_exists("version", $options))
+{
+	displayVersion($argv[0]);
+	exit();
+}
+
+if(array_key_exists("f", $options))
+	$filename = $options["f"];
+else if(array_key_exists("file", $options))
+	$filename = $options["filename"];
+else
+{
+	fwrite(STDERR, "No filename provided!\n");
+	exit(1);
+}
+
+if(array_key_exists("A", $options))
+	$attr = $options["A"];
+else if(array_key_exists("attr", $options))
+	$attr = $options["attr"];
+else
+{
+	fwrite(STDERR, "No attr provided!\n");
+	exit(1);
+}
+
+$format = array_key_exists("format", $options);
+$evalOnly = array_key_exists("eval-only", $options);
+$showTrace = array_key_exists("show-trace", $options);
+$keepFailed = array_key_exists("K", $options) || array_key_exists("keep-failed", $options);
+$noOutLink = array_key_exists("no-out-link", $options);
+
+if(array_key_exists("o", $options))
+	$outLink = $options["o"];
+else if(array_key_exists("out-link", $options))
+	$outLink = $options["out-link"];
+else
+	$outLink = null;
+
+$executable = array_key_exists("executable", $options);
+
+/* Execute the generator */
+try
+{
+	if($evalOnly)
+		PNDPBuild::evaluatePHPFile($filename, $attr, $format);
+	else
+		PNDPBuild::pndpBuild($filename, $attr, $format, $showTrace, $keepFailed, $outLink, $noOutLink);
+}
+catch(Exception $ex)
+{
+	fwrite(STDERR, $ex->getMessage()."\n");
+	exit(1);
+}
+?>

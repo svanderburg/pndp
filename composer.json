@@ -1,0 +1,23 @@
+{
+  "name": "svanderburg/pndp",
+  "description": "PNDP: An internal DSL for Nix in PHP",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+      {
+          "name": "Sander van der Burg",
+          "email": "svanderburg@gmail.com",
+          "homepage": "http://sandervanderburg.nl"
+      }
+  ],
+  
+  "autoload": {
+      "psr-4": { "PNDP\\": "src/PNDP" }
+  },
+
+  "autoload-dev": {
+      "psr-4": { "Pkgs\\": "tests/Pkgs" }
+  },
+
+  "bin": [ "bin/pndp-build" ]
+}
