@@ -38,9 +38,39 @@ class Pkgs
 		return Pkgs\Curl::composePackage($this);
 	}
 
+	public function writeTextFile($args)
+	{
+		return Pkgs\WriteTextFile::composePackage($this, $args);
+	}
+
+	public function stringWriteTest()
+	{
+		return Pkgs\StringWriteTest::composePackage($this);
+	}
+
+	public function appendFilesTest()
+	{
+		return Pkgs\AppendFilesTest::composePackage($this);
+	}
+
 	public function sayHello()
 	{
 		return Pkgs\SayHello::composePackage($this);
+	}
+
+	public function addressPerson()
+	{
+		return Pkgs\AddressPerson::composePackage($this);
+	}
+
+	public function addressPersons()
+	{
+		return Pkgs\AddressPersons::composePackage($this);
+	}
+
+	public function addressPersonInformally()
+	{
+		return Pkgs\AddressPersonInformally::composePackage($this);
 	}
 }
 ?>

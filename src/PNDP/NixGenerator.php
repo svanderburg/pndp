@@ -33,28 +33,10 @@ class NixGenerator
 			&& $value != "or" && $value != "rec" && $value != "then" && $value != "with");
 	}
 
-	public static function arrayToIndentedNix(array $array, $indentLevel, $format)
+	public static function sequentialArrayToIndentedNix(array $array, $indentLevel, $format)
 	{
-		$indentation = NixGenerator::generateIndentation($indentLevel, $format);
-
-		if(count($array) === 0)
-			$expr = "[]";
-		else if(NixGenerator::isAssociativeArray($array))
-		{
-			$expr = "{\n";
-
-			foreach($array as $key => $value)
-			{
-				if(NixGenerator::isValidIdentifier($key))
-					$attrName = $key; // The key can be used as an identifier
-				else
-					$attrName = '"'.preg_replace('/"/', '\"', $key).'"'; // The key contains weird characters or keywords and must be used as a string
-
-				$expr .= NixGenerator::generateIndentation($indentLevel + 1, $format).$attrName." = ".NixGenerator::phpToIndentedNix($value, $indentLevel + 1, $format).";\n";
-			}
-
-			$expr .= $indentation."}";
-		}
+		if(count($array) == 0)
+			return "[]";
 		else
 		{
 			$expr = "[\n";
@@ -62,7 +44,7 @@ class NixGenerator
 			foreach($array as $value)
 			{
 				$listMemberExpr = NixGenerator::phpToIndentedNix($value, $indentLevel + 1, $format);
-				
+
 				/* Some objects in a list require ( ) wrapped around them to make them work, because whitespaces are in principle the delimiter symbols in lists */
 				if($value instanceof NixBlock) {
 					$listMemberExpr = $value->wrapInParenthesis($listMemberExpr);
@@ -71,10 +53,43 @@ class NixGenerator
 				$expr .= NixGenerator::generateIndentation($indentLevel + 1, $format).$listMemberExpr."\n";
 			}
 
-			$expr .= $indentation."]";
+			$expr .= NixGenerator::generateIndentation($indentLevel, $format)."]";
+
+			return $expr;
+		}
+	}
+
+	public static function objectMembersToAttrsMembers(array $array, $indentLevel, $format)
+	{
+		$expr = "";
+
+		foreach($array as $key => $value)
+		{
+			if(NixGenerator::isValidIdentifier($key))
+				$attrName = $key; // The key can be used as an identifier
+			else
+				$attrName = '"'.preg_replace('/"/', '\"', $key).'"'; // The key contains weird characters or keywords and must be used as a string
+
+			$expr .= NixGenerator::generateIndentation($indentLevel, $format).$attrName." = ".NixGenerator::phpToIndentedNix($value, $indentLevel, $format).";\n";
 		}
 
 		return $expr;
+	}
+
+	public static function associativeArrayToIndentedNix(array $array, $indentLevel, $format)
+	{
+		if(count($array) == 0)
+			return "{}";
+		else
+			return "{\n".NixGenerator::objectMembersToAttrsMembers($array, $indentLevel + 1, $format).NixGenerator::generateIndentation($indentLevel, $format)."}";
+	}
+
+	public static function arrayToIndentedNix(array $array, $indentLevel, $format)
+	{
+		if(NixGenerator::isAssociativeArray($array))
+			return NixGenerator::associativeArrayToIndentedNix($array, $indentLevel, $format);
+		else
+			return NixGenerator::sequentialArrayToIndentedNix($array, $indentLevel, $format);
 	}
 
 	public static function objectToIndentedNix($obj, $indentLevel, $format)
