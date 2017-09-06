@@ -3,7 +3,7 @@ namespace Pkgs;
 use PNDP\AST\NixFile;
 use PNDP\AST\NixURL;
 
-class FetchURL
+class Fetchurl
 {
 	public static function composePackage($args, array $funArgs)
 	{
