@@ -2,6 +2,11 @@
 namespace PNDP\AST;
 use PNDP\NixGenerator;
 
+/**
+ * Captures the abstract syntax of a Nix of an expression yielding an attribute
+ * set and an expression yielding an attribute name that references a member of
+ * the former attribute set.
+ */
 class NixAttrReference extends NixObject
 {
 	public $attrSetExpr;
@@ -10,6 +15,13 @@ class NixAttrReference extends NixObject
 
 	public $orExpr;
 
+	/**
+	 * Creates a new NixAttrReference instance.
+	 *
+	 * @param mixed $attrSetExpr An object representing an expression that yields an attribute set
+	 * @param mixed $refExpr An object representing an expression that yields an attribute name
+	 * @param mixed $orExpr An optional object representing an expression that gets evaluated if the reference does not exist.
+	 */
 	public function __construct($attrSetExpr, $refExpr, $orExpr = null)
 	{
 		$this->attrSetExpr = $attrSetExpr;
@@ -21,6 +33,9 @@ class NixAttrReference extends NixObject
 			$this->orExpr = new NixNoDefault();
 	}
 
+	/**
+	 * @see NixObject#toNixExpr
+	 */
 	public function toNixExpr($indentLevel, $format)
 	{
 		/* Generate the sub expression that yields the attribute set */

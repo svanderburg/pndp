@@ -2,18 +2,32 @@
 namespace PNDP\AST;
 use PNDP\NixGenerator;
 
+/**
+ * Captures the abstract syntax of a Nix function invocation consisting of an
+ * expression yielding a function definition and an expression capturing the
+ * parameter.
+ */
 class NixFunInvocation extends NixBlock
 {
 	public $funExpr;
 
 	public $paramExpr;
 
+	/**
+	 * Creates a new NixFunInvocation instance.
+	 *
+	 * @param mixed $funExpr An object representing an expression that yields a function definition
+	 * @param mixed $paramExpr An object representing an expression that yields the function parameter
+	 */
 	public function __construct($funExpr, $paramExpr)
 	{
 		$this->funExpr = $funExpr;
 		$this->paramExpr = $paramExpr;
 	}
 
+	/**
+	 * @see NixObject#toNixExpr
+	 */
 	public function toNixExpr($indentLevel, $format)
 	{
 		/* Generate the sub expression that yields the function definition */

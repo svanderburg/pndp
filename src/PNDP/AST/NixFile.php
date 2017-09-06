@@ -2,16 +2,30 @@
 namespace PNDP\AST;
 use Exception;
 
+/**
+ * A Nix file object that gets imported into the Nix store. Paths to a file may
+ * be absolute (starting with a /) or relative. For relative paths a directory
+ * reference must be given so that it can be correctly resolved to a correct
+ * absolute path.
+ */
 class NixFile extends NixValue
 {
 	public $baseDir;
 
+	/** Creates a new NixFile instance.
+	 *
+	 * @param string $value An absolute or relative path to a file
+	 * @param string $baseDir Path to the base directory where the file is stored so that a relative path can be resolved
+	 */
 	public function __construct($value, $baseDir = null)
 	{
 		parent::__construct($value);
 		$this->baseDir = $baseDir;
 	}
 
+	/**
+	 * @see NixObject#toNixExpr
+	 */
 	public function toNixExpr($indentLevel, $format)
 	{
 		/*

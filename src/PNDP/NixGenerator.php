@@ -1,8 +1,9 @@
 <?php
 namespace PNDP;
 use Exception;
-use PNDP\AST\NixObject;
 use PNDP\AST\NixBlock;
+use PNDP\AST\NixInherit;
+use PNDP\AST\NixObject;
 
 class NixGenerator
 {
@@ -59,18 +60,54 @@ class NixGenerator
 		}
 	}
 
+	public static function objectKeyToAttrName($key)
+	{
+		if(NixGenerator::isValidIdentifier($key))
+			return $key; // The key can be used as an identifier
+		else
+			return '"'.preg_replace('/"/', '\"', $key).'"'; // The key contains weird characters or keywords and must be used as a string
+	}
+
 	public static function objectMembersToAttrsMembers(array $array, $indentLevel, $format)
 	{
 		$expr = "";
 
+		/* Convert inherit objects separately, since they have to be generated differently */
+
+		$first = true;
+		$haveInherits = false;
+		$previousInherit = null;
+
 		foreach($array as $key => $value)
 		{
-			if(NixGenerator::isValidIdentifier($key))
-				$attrName = $key; // The key can be used as an identifier
-			else
-				$attrName = '"'.preg_replace('/"/', '\"', $key).'"'; // The key contains weird characters or keywords and must be used as a string
+			if($value instanceof NixInherit)
+			{
+				$haveInherits = true;
 
-			$expr .= NixGenerator::generateIndentation($indentLevel, $format).$attrName." = ".NixGenerator::phpToIndentedNix($value, $indentLevel, $format).";\n";
+				if($previousInherit === null || !$value->equals($previousInherit)) // If the current inherit applies to the same scope as the previous inherit we can merge them into a single inherit statement. If not, we must terminate it, and generate a new one
+				{
+					if($first)
+						$first = false;
+					else
+						$expr .= ";\n";
+
+					$expr .= NixGenerator::generateIndentation($indentLevel, $format).$value->toNixExpr($indentLevel, $format);
+				}
+
+				$expr .= " ".NixGenerator::objectKeyToAttrName($key);
+				$previousInherit = $value;
+			}
+		}
+
+		if($haveInherits)
+			$expr .= ";\n"; // If we have inherits we must terminate it with a semicolon
+
+		/* Process "ordinary" object members */
+
+		foreach($array as $key => $value)
+		{
+			if(!($value instanceof NixInherit))
+				$expr .= NixGenerator::generateIndentation($indentLevel, $format).NixGenerator::objectKeyToAttrName($key)." = ".NixGenerator::phpToIndentedNix($value, $indentLevel, $format).";\n";
 		}
 
 		return $expr;

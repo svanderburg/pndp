@@ -72,5 +72,20 @@ class Pkgs
 	{
 		return Pkgs\AddressPersonInformally::composePackage($this);
 	}
+
+	public function sayHello2()
+	{
+		return Pkgs\SayHello2::composePackage($this);
+	}
+
+	public function objToXML()
+	{
+		return Pkgs\ObjToXML::composePackage($this);
+	}
+
+	public function conditionals()
+	{
+		return Pkgs\Conditionals::composePackage($this);
+	}
 }
 ?>
