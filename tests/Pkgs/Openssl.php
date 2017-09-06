@@ -2,7 +2,7 @@
 namespace Pkgs;
 use PNDP\AST\NixURL;
 
-class OpenSSL
+class Openssl
 {
 	public static function composePackage($args)
 	{
