@@ -8,20 +8,16 @@ class Pkgs
 		$this->stdenv = new Pkgs\Stdenv();
 	}
 
+	/* Manual compositions of packages */
+
 	public function fetchurl($args)
 	{
 		return Pkgs\Fetchurl::composePackage($this, $args);
 	}
 
-	/* Manual composition of a package */
 	public function hello()
 	{
 		return Pkgs\Hello::composePackage($this);
-	}
-
-	public function writeTextFile($args)
-	{
-		return Pkgs\WriteTextFile::composePackage($this, $args);
 	}
 
 	/* Auto composition of arbitrary packages */
