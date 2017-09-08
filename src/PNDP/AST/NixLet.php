@@ -31,7 +31,7 @@ class NixLet extends NixBlock
 		$indentation = NixGenerator::generateIndentation($indentLevel, $format);
 
 		return "let\n".
-			NixGenerator::objectMembersToAttrsMembers($this->value, $indentLevel + 1, $format).
+			NixGenerator::arrayMembersToAttrsMembers($this->value, $indentLevel + 1, $format).
 			$indentation."in\n".
 			$indentation.NixGenerator::phpToIndentedNix($this->body, $indentLevel, $format);
 	}

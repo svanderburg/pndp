@@ -7,6 +7,13 @@ use PNDP\AST\NixObject;
 
 class NixGenerator
 {
+	/**
+	 * Generates indentation to format the resulting output expression more nicely.
+	 *
+	 * @param int $indentLevel The indentation level of the resulting sub expression
+	 * @param bool $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
+	 * @return string A string with the amount of whitespaces corresponding to the indent level
+	 */
 	public static function generateIndentation($indentLevel, $format)
 	{
 		if($format)
@@ -34,6 +41,14 @@ class NixGenerator
 			&& $value != "or" && $value != "rec" && $value != "then" && $value != "with");
 	}
 
+	/**
+	 * Converts an array to a Nix list.
+	 *
+	 * @param array $array Array to convert
+	 * @param int $indentLevel The indentation level of the resulting sub expression
+	 * @param bool $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
+	 * @return A string representing the corresponding Nix list
+	 */
 	public static function sequentialArrayToIndentedNix(array $array, $indentLevel, $format)
 	{
 		if(count($array) == 0)
@@ -68,7 +83,15 @@ class NixGenerator
 			return '"'.preg_replace('/"/', '\"', $key).'"'; // The key contains weird characters or keywords and must be used as a string
 	}
 
-	public static function objectMembersToAttrsMembers(array $array, $indentLevel, $format)
+	/**
+	 * Converts members of an array to members of an attribute set
+	 *
+	 * @param array $array Array to convert
+	 * @param int $indentLevel The indentation level of the resulting sub expression
+	 * @param bool $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
+	 * @return string A string containing the Nix attribute set members
+	 */
+	public static function arrayMembersToAttrsMembers(array $array, $indentLevel, $format)
 	{
 		$expr = "";
 
@@ -113,12 +136,20 @@ class NixGenerator
 		return $expr;
 	}
 
+	/**
+	 * Converts an array to a Nix attribute set.
+	 *
+	 * @param array $array Array to convert
+	 * @param int $indentLevel The indentation level of the resulting sub expression
+	 * @param bool $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
+	 * @return A string representing the corresponding Nix list
+	 */
 	public static function associativeArrayToIndentedNix(array $array, $indentLevel, $format)
 	{
 		if(count($array) == 0)
 			return "{}";
 		else
-			return "{\n".NixGenerator::objectMembersToAttrsMembers($array, $indentLevel + 1, $format).NixGenerator::generateIndentation($indentLevel, $format)."}";
+			return "{\n".NixGenerator::arrayMembersToAttrsMembers($array, $indentLevel + 1, $format).NixGenerator::generateIndentation($indentLevel, $format)."}";
 	}
 
 	public static function arrayToIndentedNix(array $array, $indentLevel, $format)
@@ -153,6 +184,16 @@ class NixGenerator
 		return '"'.preg_replace(array('/\\\/', '/"/'), array('\\\\\\', '\"'), $obj).'"'; // escape " and / '
 	}
 
+	/**
+	 * Converts a PHP variable of any type to a semantically equivalent or
+	 * similar Nix expression language object. It also uses indentation to
+	 * format the resulting sub expression more nicely.
+	 *
+	 * @param mixed $obj A variable of any type
+	 * @param int $indentLevel Contains the indentation level
+	 * @param bool $format Indicates whether to nicely format the generated expression
+	 * @return string A string containing the converted Nix expression language object
+	 */
 	public static function phpToIndentedNix($obj, $indentLevel, $format)
 	{
 		$expr = "";
@@ -192,6 +233,14 @@ class NixGenerator
 		return $expr;
 	}
 
+	/**
+	 * Converts a PHP variable of any type to a semantically equivalent or
+	 * similar Nix expression language object.
+	 *
+	 * @param mixed $obj A variable of any type
+	 * @param bool $format Indicates whether to nicely format the generated expression
+	 * @return string A string containing the converted Nix expression language object
+	 */
 	public static function phpToNix($obj, $format)
 	{
 		return NixGenerator::phpToIndentedNix($obj, 0, $format);

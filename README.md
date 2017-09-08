@@ -133,15 +133,15 @@ class Hello
 
             "src" => $args->fetchurl(array(
                 "url" => new NixURL("mirror://gnu/hello/hello-2.10.tar.gz"),
-                 "sha256" => "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i"
+                "sha256" => "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i"
             )),
 
             "doCheck" => true,
 
             "meta" => array(
                 "description" => "A program that produces a familiar, friendly greeting",
-                 "homepage" => new NixURL("http://www.gnu.org/software/hello/manual"),
-                 "license" => "GPLv3+"
+                "homepage" => new NixURL("http://www.gnu.org/software/hello/manual"),
+                "license" => "GPLv3+"
             )
         ));
     }

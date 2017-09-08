@@ -26,7 +26,7 @@ class NixRecursiveAttrSet extends NixValue
 			return "rec {}";
 		else
 			return "rec {\n".
-				NixGenerator::objectMembersToAttrsMembers($this->value, $indentLevel + 1, $format).
+				NixGenerator::arrayMembersToAttrsMembers($this->value, $indentLevel + 1, $format).
 				NixGenerator::generateIndentation($indentLevel, $format)."}";
 	}
 }
