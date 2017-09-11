@@ -236,9 +236,11 @@ $expr = PNDPBuild::evaluatePackage("Pkgs.php", "hello", false);
 PNDPBuild::callNixBuild($expr, array());
 ```
 
-In the code fragment above we call the `callNixBuild` function, in which we
-evaluate the hello package that gets built by Nix. When the build succeeds,
-the store path is printed on the standard output.
+In the code fragment above, we open the composition class file, named:
+`Pkgs.php` and we evaluate the `hello()` method to generate the Nix expression.
+Finally, we call the `callNixBuild` function, in which we evaluate the generated
+expression by the Nix package manager. When the build succeeds, the resulting
+Nix store path is printed on the standard output.
 
 Building packages through a command-line utility
 ------------------------------------------------

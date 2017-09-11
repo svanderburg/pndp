@@ -1,6 +1,5 @@
 {
   "name": "svanderburg/pndp",
-  "version": "0.0.1",
   "description": "PNDP: An internal DSL for Nix in PHP",
   "type": "library",
   "license": "MIT",
