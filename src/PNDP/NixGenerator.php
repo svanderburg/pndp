@@ -28,12 +28,18 @@ class NixGenerator
 			return "";
 	}
 
+	/**
+	 * Checks whether an array is associative.
+	 *
+	 * @param array $array Array to check
+	 * @return bool true is the array is associative, false if it is sequential
+	 */
 	public static function isAssociativeArray(array $array)
 	{
 		return($array !== array() && array_keys($array) !== range(0, count($array) - 1));
 	}
 
-	public static function isValidIdentifier($value)
+	private static function isValidIdentifier($value)
 	{
 		return (preg_match('/^[a-zA-Z\_][a-zA-Z0-9\_\'\-]*$/', $value) === 1
 			&& $value != "assert" && $value != "else"
@@ -52,7 +58,7 @@ class NixGenerator
 	public static function sequentialArrayToIndentedNix(array $array, $indentLevel, $format)
 	{
 		if(count($array) == 0)
-			return "[]";
+			return "[]"; // Not strictly required, but printing an empty list like this is better than putting a newline between the brackets
 		else
 		{
 			$expr = "[\n";
@@ -75,7 +81,7 @@ class NixGenerator
 		}
 	}
 
-	public static function objectKeyToAttrName($key)
+	private static function objectKeyToAttrName($key)
 	{
 		if(NixGenerator::isValidIdentifier($key))
 			return $key; // The key can be used as an identifier
@@ -147,12 +153,12 @@ class NixGenerator
 	public static function associativeArrayToIndentedNix(array $array, $indentLevel, $format)
 	{
 		if(count($array) == 0)
-			return "{}";
+			return "{}"; // Not strictly required, but printing an empty attribute set like this is better that putting a newline between the braces
 		else
 			return "{\n".NixGenerator::arrayMembersToAttrsMembers($array, $indentLevel + 1, $format).NixGenerator::generateIndentation($indentLevel, $format)."}";
 	}
 
-	public static function arrayToIndentedNix(array $array, $indentLevel, $format)
+	private static function arrayToIndentedNix(array $array, $indentLevel, $format)
 	{
 		if(NixGenerator::isAssociativeArray($array))
 			return NixGenerator::associativeArrayToIndentedNix($array, $indentLevel, $format);
@@ -160,7 +166,7 @@ class NixGenerator
 			return NixGenerator::sequentialArrayToIndentedNix($array, $indentLevel, $format);
 	}
 
-	public static function objectToIndentedNix($obj, $indentLevel, $format)
+	private static function objectToIndentedNix($obj, $indentLevel, $format)
 	{
 		if($obj instanceof NixObject)
 			return $obj->toNixExpr($indentLevel, $format);
@@ -171,7 +177,7 @@ class NixGenerator
 		}
 	}
 
-	public static function booleanToIndentedNix($obj)
+	private static function booleanToIndentedNix($obj)
 	{
 		if($obj)
 			return "true";
@@ -179,7 +185,7 @@ class NixGenerator
 			return "false";
 	}
 
-	public static function stringToIndentedNix($obj)
+	private static function stringToIndentedNix($obj)
 	{
 		return '"'.preg_replace(array('/\\\/', '/"/'), array('\\\\\\', '\"'), $obj).'"'; // escape " and / '
 	}
