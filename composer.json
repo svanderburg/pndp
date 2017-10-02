@@ -19,5 +19,9 @@
       "psr-4": { "Pkgs\\": "tests/Pkgs" }
   },
 
+  "require-dev": {
+      "phpdocumentor/phpdocumentor": "2.9.x"
+  },
+
   "bin": [ "bin/pndp-build" ]
 }
