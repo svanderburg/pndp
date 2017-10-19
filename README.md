@@ -260,6 +260,181 @@ We can also nicely format the generated expression to improve readability:
 
     $ pndp-build -f Pkgs.js -A hello --eval-only --format
 
+Transforming custom object structures into Nix expressions
+----------------------------------------------------------
+As explained earlier, PNDP transforms objects in the PHP language to
+semantically equivalent (or similar) constructs in the Nix expression language.
+
+Sometimes it may also be desired to generate Nix expressions from a domain
+model, designed for solving a specific non-deployment related problem, with
+properties and structures that cannot be literally translated into a
+representation in the Nix expression language.
+
+It is also possible to specify for an object how to generate a Nix expression
+from it. This can be done by inheriting from the `NixASTNode` class and
+overriding the `toNixAST` method.
+
+For example, we may have a system already providing a representation of a file
+that should be downloaded from an external source:
+
+```php
+class HelloSourceModel
+{
+    private $args;
+    private $src;
+    private $sha256;
+
+    public function __construct($args)
+    {
+        $this->args = $args;
+        $this->src = "mirror://gnu/hello/hello-2.10.tar.gz";
+        $this->sha256 = "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i";
+    }
+}
+```
+
+The above class' constructor composes an object that refers to the GNU Hello
+package provided by a GNU mirror site.
+
+A direct translation of the above constructed object to the Nix expression
+language does not provide anything meaningful -- it can, for example, not be
+used to let Nix fetch the package from the mirror site.
+
+We can inherit from `NixASTNode` and implement our own custom `toNixAST()`
+method to provide a more meaningful Nix translation:
+
+```php
+use PNDP\AST\NixASTNode;
+use PNDP\AST\NixURL;
+
+class HelloSourceModel extends NixASTNode
+{
+    ...
+    /**
+     * @see NixASTConvertable#toNixAST
+     */
+    public function toNixAST()
+    {
+        return $this->args->fetchurl(array(
+            "url" => new NixURL($this->src),
+            "sha256" => $this->sha256
+        ));
+    }
+}
+```
+
+The `toNixAST()` method shown above composes an abstract syntax tree (AST) for
+a function invocation to `fetchurl {}` in the Nix expression language with the
+`url` and `sha256` properties a parameters.
+
+An object that inherits from the `NixASTNode` class also indirectly inherits
+from `NixObject`. This means that we can directly attach such an object to any
+other AST object. The generator uses the underlying `toNixAST()` method to
+automatically convert it to its AST representation.
+
+For example, we can also define the GNU Hello package as an object that is an
+instance of a custom class:
+
+```php
+class HelloModel
+{
+    private $args;
+    private $name;
+    private $source;
+    private $meta;
+
+    public function __construct($args)
+    {
+        $this->args = $args;
+
+        $this->name = "hello-2.10";
+        $this->source = new HelloSourceModel($args);
+        $this->meta = array(
+            "description" => "A program that produces a familiar, friendly greeting",
+            "homepage" => "http://www.gnu.org/software/hello/manual",
+            "license" => "GPLv3+"
+        );
+    }
+}
+```
+
+In the above function, we construct a build recipe for GNU Hello using a
+convention that is not directly usable in Nix. The object also has a reference
+to a source object that is an instance of the class shown in the previous
+example.
+
+By inheriting from `NixASTNode` and overriding `toNixAST()`, we can construct an
+AST for a Nix expression that builds the package:
+
+```php
+use PNDP\AST\NixASTNode;
+
+class HelloModel extends NixASTNode
+{
+    ...
+    /**
+     * @see NixASTConvertable#toNixAST
+     */
+    public function toNixAST()
+    {
+        return $this->args->stdenv->mkDerivation(array(
+            "name" => $this->name,
+            "src" => $this->source,
+            "doCheck" => true,
+            "meta" => $this->meta
+        ));
+    }
+}
+```
+
+The above function constructs an AST for a function invocation to
+`stdenv.mkDerivation {}`, using the object's properties a parameters. It
+directly refers to the source object (`$this->source`) without any conversions
+-- because the source object inherits from `NixAST` and (indirectly) from
+`NixObject`, the generator will automatically convert it to an AST for a
+`fetchurl {}` function invocation.
+
+In some cases, it may not be possible to inherit from `NixASTNode`, for example,
+when the object already inherits from another class that is beyond the user's
+control.
+
+It is also possible to use the `NixASTNode` constructor function as an adapter
+for any object that implements the `NixASTConvertable` interface.
+
+For example, we may want to use a wrapper to transform the metadata in a more
+suitable representation for conversion to a Nix expression:
+
+```php
+use PNDP\AST\NixASTConvertable;
+use PNDP\AST\NixURL;
+
+class MetaDataWrapper implements NixASTConvertable
+{
+    private $meta;
+
+    public function __construct(array $meta)
+    {
+        $this->meta = $meta;
+    }
+
+    public function toNixAST()
+    {
+        return array(
+            "description" => $this->meta["description"],
+            "homepage" => new NixURL($this->meta["homepage"]),
+            "license" => $this->meta["license"]
+        );
+    }
+}
+```
+
+By wrapping the `MetaDataWrapper` object instance into the `NixASTNode`
+constructor, we can convert it to an object that is an instance of `NixASTNode`:
+
+```php
+new NixASTNode(new MetaDataWrapper($this->meta))
+```
+
 Examples
 ========
 The `tests/` directory contains a collection of example packages:

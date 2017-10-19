@@ -5,6 +5,9 @@ use PNDP\AST\NixBlock;
 use PNDP\AST\NixInherit;
 use PNDP\AST\NixObject;
 
+/**
+ * Contains Nix expression generation utility functions.
+ */
 class NixGenerator
 {
 	/**

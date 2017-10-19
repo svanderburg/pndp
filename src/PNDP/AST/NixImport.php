@@ -2,8 +2,7 @@
 namespace PNDP\AST;
 
 /**
- * A Nix object that imports an external Nix expression file referring to a Nix
- * expression file.
+ * A Nix object that imports an external Nix expression file.
  */
 class NixImport extends NixFunInvocation
 {

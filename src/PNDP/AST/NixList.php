@@ -3,7 +3,7 @@ namespace PNDP\AST;
 use PNDP\NixGenerator;
 
 /**
- * A utility class that forces an array to manifest itself as an attribute set.
+ * A utility class that forces an array to manifest itself as a list.
  */
 class NixList extends NixValue
 {

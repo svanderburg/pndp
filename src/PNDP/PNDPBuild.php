@@ -2,6 +2,9 @@
 namespace PNDP;
 use Exception;
 
+/**
+ * Contains utility functions that can be used to build packages with the Nix package manager.
+ */
 class PNDPBuild
 {
 	public static function evaluatePackage($filename, $attr, $format)
