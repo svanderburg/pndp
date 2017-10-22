@@ -53,6 +53,7 @@ let
           addressPersonInformally = pndpImportPackage { inherit pkgsPhpFile autoloadPhpFile; attrName = "addressPersonInformally"; };
           sayHello2 = pndpImportPackage { inherit pkgsPhpFile autoloadPhpFile; attrName = "sayHello2"; };
           objToXML = pndpImportPackage { inherit pkgsPhpFile autoloadPhpFile; attrName = "objToXML"; };
+          instanceToXML = pndpImportPackage { inherit pkgsPhpFile autoloadPhpFile; attrName = "instanceToXML"; };
           conditionals = pndpImportPackage { inherit pkgsPhpFile autoloadPhpFile; attrName = "conditionals"; };
           HelloModel = pndpImportPackage { inherit pkgsPhpFile autoloadPhpFile; attrName = "HelloModel"; };
         };
