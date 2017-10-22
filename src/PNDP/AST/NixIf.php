@@ -28,7 +28,7 @@ class NixIf extends NixBlock
 	}
 
 	/**
-	 * @see NixObject#toNixExpr
+	 * @see NixObject::toNixExpr()
 	 */
 	public function toNixExpr($indentLevel, $format)
 	{

@@ -34,7 +34,7 @@ class NixAttrReference extends NixObject
 	}
 
 	/**
-	 * @see NixObject#toNixExpr
+	 * @see NixObject::toNixExpr()
 	 */
 	public function toNixExpr($indentLevel, $format)
 	{

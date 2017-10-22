@@ -26,7 +26,7 @@ class NixASTNode extends NixObject implements NixASTConvertable
 	}
 
 	/**
-	 * @see NixASTConvertable::toNixAST
+	 * @see NixASTConvertable::toNixAST()
 	 */
 	public function toNixAST()
 	{
@@ -34,7 +34,7 @@ class NixASTNode extends NixObject implements NixASTConvertable
 	}
 
 	/**
-	 * @see NixObject::toNixExpr
+	 * @see NixObject::toNixExpr()
 	 */
 	public function toNixExpr($indentLevel, $format)
 	{

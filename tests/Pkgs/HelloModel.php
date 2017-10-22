@@ -25,7 +25,7 @@ class HelloModel extends NixASTNode
 	}
 
 	/**
-	 * @see NixASTConvertable#toNixAST
+	 * @see NixASTConvertable::toNixAST()
 	 */
 	public function toNixAST()
 	{

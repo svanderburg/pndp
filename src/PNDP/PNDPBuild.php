@@ -50,9 +50,29 @@ class PNDPBuild
 		if($pkgsExpression === null)
 			$pkgsExpression = "import <nixpkgs> {}";
 
+		/*
+		 * Hacky way to determine whether nijs is deployed by Nix or Composer.
+		 * If deployed by the latter, we need to somehow get it in the Nix store
+		 * when invoking inline PHP stuff
+		 */
+
+		$modulePathComponents = explode('/', __FILE__);
+
+		if(count($modulePathComponents) >= 4)
+		{
+			$rootPathComponent = $modulePathComponents[count($modulePathComponents) - 4];
+
+			if(substr($rootPathComponent, 32, 1) == "-") // This looks very much like a Nix store path
+				$pndpPath = "builtins.storePath ".realpath(dirname(__FILE__)."/../..");
+			else
+				$pndpPath = "builtins.getAttr (builtins.currentSystem) ((import ".realpath(dirname(__FILE__)."/../../release.nix")." {}).package)";
+		}
+
 		/* Generate a Nix expression and evaluate it */
 		$expression = "let\n".
 			"  pkgs = ".$pkgsExpression.";\n".
+			"  pndp = ".$pndpPath.";\n".
+			'  pndpInlineProxy = import "${pndp}/src/PNDP/inlineProxy.nix" { inherit (pkgs) stdenv writeTextFile php; inherit pndp; };'."\n".
 			"in\n".
 			$nixExpression;
 

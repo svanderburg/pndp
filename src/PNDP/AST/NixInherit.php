@@ -21,7 +21,7 @@ class NixInherit extends NixObject
 	}
 
 	/**
-	 * @see NixObject#toNixExpr
+	 * @see NixObject::toNixExpr()
 	 */
 	public function toNixExpr($indentLevel, $format)
 	{
