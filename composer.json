@@ -10,7 +10,7 @@
           "homepage": "http://sandervanderburg.nl"
       }
   ],
-  
+
   "autoload": {
       "psr-4": { "PNDP\\": "src/PNDP" }
   },

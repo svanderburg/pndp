@@ -16,12 +16,12 @@ let
     dev = pkgs.lib.genAttrs systems (system: (import ./default.nix {
       inherit pkgs system;
     }).override (oldAttrs: {
-      buildInputs = oldAttrs.buildInputs ++ [ pkgs.graphviz ];
+      buildInputs = [ pkgs.graphviz ];
       executable = true;
       postInstall = ''
         vendor/bin/phpdoc
         mkdir -p $out/nix-support
-        echo "doc api $out/doc" >> $out/nix-support/hydra-build-products
+        echo "doc api $out/share/php/composer-svanderburg-pndp/doc" >> $out/nix-support/hydra-build-products
       '';
     }));
 
@@ -29,8 +29,8 @@ let
       pkgs =
         let
           devPackage = jobs.dev."${builtins.currentSystem}";
-          pkgsPhpFile = "${devPackage}/tests/Pkgs.php";
-          autoloadPhpFile = "${devPackage}/vendor/autoload.php";
+          pkgsPhpFile = "${devPackage}/share/php/composer-svanderburg-pndp/tests/Pkgs.php";
+          autoloadPhpFile = "${devPackage}/share/php/composer-svanderburg-pndp/vendor/autoload.php";
 
           pndpImportPackage = import ./src/PNDP/importPackage.nix {
             inherit nixpkgs;
@@ -57,6 +57,13 @@ let
           conditionals = pndpImportPackage { inherit pkgsPhpFile autoloadPhpFile; attrName = "conditionals"; };
           HelloModel = pndpImportPackage { inherit pkgsPhpFile autoloadPhpFile; attrName = "HelloModel"; };
         };
+    };
+
+    release = pkgs.releaseTools.aggregate {
+      name = "composer2nix";
+      constituents = map (system: builtins.getAttr system jobs.package) systems
+      ++ map (system: builtins.getAttr system jobs.dev) systems
+      ++ map (pkgName: builtins.getAttr pkgName jobs.tests.pkgs) (builtins.attrNames jobs.tests.pkgs);
     };
   };
 in
