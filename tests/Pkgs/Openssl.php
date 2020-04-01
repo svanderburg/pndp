@@ -7,11 +7,11 @@ class Openssl
 	public static function composePackage($args)
 	{
 		return $args->stdenv->mkDerivation(array(
-			"name" => "openssl-1.1.0f",
+			"name" => "openssl-1.1.1f",
 
 			"src" => $args->fetchurl(array(
-				"url" => new NixURL("https://www.openssl.org/source/openssl-1.1.0f.tar.gz"),
-				"sha256" => "0r97n4n552ns571diz54qsgarihrxvbn7kvyv8wjyfs9ybrldxqj"
+				"url" => new NixURL("https://www.openssl.org/source/openssl-1.1.1f.tar.gz"),
+				"sha256" => "0d9zv9srjqivs8nn099fpbjv1wyhfcb8lzy491dpmfngdvz6nv0q"
 			)),
 
 			"buildInputs" => array($args->perl()),

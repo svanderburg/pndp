@@ -7,10 +7,10 @@ class Curl
 	public static function composePackage($args)
 	{
 		return $args->stdenv->mkDerivation(array(
-			"name" => "curl-7.55.1",
+			"name" => "curl-7.69.1",
 			"src" => $args->fetchurl(array(
-				"url" => new NixURL("http://curl.haxx.se/download/curl-7.55.1.tar.bz2"),
-				"sha256" => "1yvcn7jbh99gsqhc040nky0h15a1cfh8yic6k0a1zhdhscpakcg5"
+				"url" => new NixURL("http://curl.haxx.se/download/curl-7.69.1.tar.bz2"),
+				"sha256" => "1s2ddjjif1wkp69vx25nzxklhimgqzaazfzliyl6mpvsa2yybx9g"
 			)),
 
 			"propagatedBuildInputs" => array(
