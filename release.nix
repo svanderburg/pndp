@@ -16,12 +16,12 @@ let
     dev = pkgs.lib.genAttrs systems (system: (import ./default.nix {
       inherit pkgs system;
     }).override (oldAttrs: {
-      buildInputs = [ pkgs.graphviz ];
+      buildInputs = [ pkgs.doxygen ];
       executable = true;
       postInstall = ''
-        vendor/bin/phpdoc
+        doxygen
         mkdir -p $out/nix-support
-        echo "doc api $out/share/php/composer-svanderburg-pndp/doc" >> $out/nix-support/hydra-build-products
+        echo "doc api $out/share/php/composer-svanderburg-pndp/doc/html" >> $out/nix-support/hydra-build-products
       '';
     }));
 
