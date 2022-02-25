@@ -4,7 +4,7 @@ use PNDP\AST\NixWith;
 
 class SayHello2
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		return new NixWith(array(
 			"firstName" => "Sander",

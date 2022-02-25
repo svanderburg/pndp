@@ -4,7 +4,7 @@ require_once(dirname(__FILE__)."/../vendor/autoload.php");
 
 use PNDP\PNDPBuild;
 
-function displayHelp($command)
+function displayHelp(string $command): void
 {
 	print("Usage: ".$command." [OPTION]\n\n");
 	echo <<<EOT
@@ -31,7 +31,7 @@ Options:
 EOT;
 }
 
-function displayVersion($command)
+function displayVersion(string $command): void
 {
 	print($command." (pndp 0.0.1)\n\nCopyright (C) 2017 Sander van der Burg\n");
 }

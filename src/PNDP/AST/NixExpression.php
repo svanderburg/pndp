@@ -9,9 +9,9 @@ class NixExpression extends NixValue
 	/**
 	 * Creates a new NixExpression instance.
 	 *
-	 * @param string $value Value containing a Nix expression
+	 * @param $value Value containing a Nix expression
 	 */
-	public function __construct($value)
+	public function __construct(string $value)
 	{
 		parent::__construct($value);
 	}
@@ -19,7 +19,7 @@ class NixExpression extends NixValue
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		return $this->value;
 	}

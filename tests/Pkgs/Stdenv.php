@@ -5,7 +5,7 @@ use PNDP\AST\NixExpression;
 
 class Stdenv
 {
-	public function mkDerivation($args)
+	public function mkDerivation(array $args)
 	{
 		return new NixFunInvocation(new NixExpression("pkgs.stdenv.mkDerivation"), $args);
 	}

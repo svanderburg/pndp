@@ -9,7 +9,7 @@ class NixImport extends NixFunInvocation
 	/**
 	 * Creates a new NixImport instance.
 	 *
-	 * @param string $value A sub expression referring to an external Nix expression file
+	 * @param $value A sub expression referring to an external Nix expression file
 	 */
 	public function __construct($value)
 	{

@@ -4,7 +4,7 @@ use PNDP\AST\NixFile;
 
 class AppendFilesTest
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		return $args->stdenv->mkDerivation(array(
 			"name" => "appendFiles",

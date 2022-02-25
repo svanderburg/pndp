@@ -7,15 +7,17 @@ use PNDP\NixGenerator;
  */
 class NixAssert extends NixBlock
 {
+	/** An object representing an expression evaluating to a boolean */
 	public $conditionExpr;
 
+	/** Expression that gets evaluated if the condition is true. If it is false, the evaluation aborts with an error */
 	public $body;
 
 	/**
 	 * Creates a new NixAssert instance.
 	 *
-	 * @param mixed $conditionExpr An object representing an expression evaluating to a boolean
-	 * @param mixed $body Expression that gets evaluated if the condition is true. If it is false, the evaluation aborts with an error.
+	 * @param $conditionExpr An object representing an expression evaluating to a boolean
+	 * @param $body Expression that gets evaluated if the condition is true. If it is false, the evaluation aborts with an error.
 	 */
 	public function __construct($conditionExpr, $body)
 	{
@@ -26,7 +28,7 @@ class NixAssert extends NixBlock
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		return "assert ".NixGenerator::phpToIndentedNix($this->conditionExpr, $indentLevel, $format).";\n".
 			NixGenerator::generateIndentation($indentLevel, $format).NixGenerator::phpToIndentedNix($this->body, $indentLevel, $format);

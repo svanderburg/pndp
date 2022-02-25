@@ -5,7 +5,7 @@ use PNDP\AST\NixURL;
 
 class CreateFileWithMessageTest
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		$buildCommand = <<<EOT
 mkdir(getenv("out"));

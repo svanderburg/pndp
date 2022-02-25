@@ -10,7 +10,7 @@ class NixAttrSet extends NixValue
 	/**
 	 * Creates a new NixAttrSet instance.
 	 *
-	 * @param array $value An array that should be represented as an attribute set
+	 * @param $value An array that should be represented as an attribute set
 	 */
 	public function __construct(array $value)
 	{
@@ -20,7 +20,7 @@ class NixAttrSet extends NixValue
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		return NixGenerator::associativeArrayToIndentedNix($this->value, $indentLevel, $format);
 	}

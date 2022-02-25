@@ -19,14 +19,23 @@ number of additional features.
 
 Prerequisites
 =============
-* PHP 5.4.x or higher
+* PHP 7.4.x or higher
 * Of course, since this package provides a feature for Nix, we require the [Nix package manager](http://nixos.org/nix) to be installed
 
 Installation
 ============
 This package can be installed globally with composer:
 
-    $ php composer.phar global require svanderburg/pndp
+```bash
+$ php composer.phar global require svanderburg/pndp
+```
+
+It is also possible to install the package with Nix by checking out the Git
+repository and running:
+
+```bash
+$ nix-env -f release.nix -iA package.x86_64-linux
+```
 
 Usage
 =====
@@ -49,7 +58,7 @@ use PNDP\AST\NixExpression;
 
 class Stdenv
 {
-    public function mkDerivation($args)
+    public function mkDerivation(array $args)
     {
         return new NixFunInvocation(new NixExpression("pkgs.stdenv.mkDerivation"), $args);
     }
@@ -72,7 +81,7 @@ to Nix expression language constructs.
 PHP objects are translated into semantically equivalent (or similar) Nix
 expression language objects as follows:
 
-* Variables of type `boolean`, `integer` and `double` are translated verbatim
+* Variables of type `bool`, `int` and `float` are translated verbatim
 * Variables of type `string` are translated verbatim and are automatically escaped
 * When an `array` appears to be *sequential* (i.e. it has numeric keys appearing
   in sequential order) it will be recursively translated into a list of objects.
@@ -145,7 +154,7 @@ use PNDP\AST\NixURL;
 
 class Hello
 {
-    public static function composePackage($args)
+    public static function composePackage(object $args)
     {
         return $args->stdenv->mkDerivation(array(
             "name" => "hello-2.10",
@@ -198,7 +207,7 @@ class Pkgs
         $this->stdenv = new Pkgs\Stdenv();
     }
 
-    public function fetchurl($args)
+    public function fetchurl(array $args)
     {
         return Pkgs\Fetchurl::composePackage($this, $args);
     }
@@ -223,7 +232,7 @@ process. We can also *generalize* the method invocation of any package by
 implementing the `__call()` magic method:
 
 ```php
-public function __call($name, $arguments)
+public function __call(string $name, array $arguments)
 {
     // Compose the classname from the function name
     $className = ucfirst($name);
@@ -257,7 +266,7 @@ use PNDP\AST\NixURL;
 
 class CreateFileWithMessageTest
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		$buildCommand = <<<EOT
 mkdir(getenv("out"));
@@ -303,17 +312,23 @@ As the previous code example is so common, there is also a command-line utility
 that can do the same. The following instruction builds the hello package from the
 composition class (`Pkgs.php`):
 
-    $ pndp-build -f Pkgs.php -A hello
+```bash
+$ pndp-build -f Pkgs.php -A hello
+```
 
 It may also be useful to see what kind of Nix expression is generated for
 debugging or testing purposes. The `--eval-only` option prints the generated
 Nix expression on the standard output:
 
-    $ pndp-build -f Pkgs.js -A hello --eval-only
+```bash
+$ pndp-build -f Pkgs.js -A hello --eval-only
+```
 
 We can also nicely format the generated expression to improve readability:
 
-    $ pndp-build -f Pkgs.js -A hello --eval-only --format
+```bash
+$ pndp-build -f Pkgs.js -A hello --eval-only --format
+```
 
 Building PNDP packages from a Nix expression
 --------------------------------------------
@@ -364,11 +379,11 @@ that should be downloaded from an external source:
 ```php
 class HelloSourceModel
 {
-    private $args;
-    private $src;
-    private $sha256;
+    private object $args;
+    private string $src;
+    private string $sha256;
 
-    public function __construct($args)
+    public function __construct(object $args)
     {
         $this->args = $args;
         $this->src = "mirror://gnu/hello/hello-2.10.tar.gz";
@@ -422,12 +437,12 @@ instance of a custom class:
 ```php
 class HelloModel
 {
-    private $args;
-    private $name;
-    private $source;
-    private $meta;
+    private object $args;
+    private string $name;
+    private HelloSourceModel $source;
+    private array $meta;
 
-    public function __construct($args)
+    public function __construct(object $args)
     {
         $this->args = $args;
 
@@ -494,7 +509,7 @@ use PNDP\AST\NixURL;
 
 class MetaDataWrapper implements NixASTConvertable
 {
-    private $meta;
+    private array $meta;
 
     public function __construct(array $meta)
     {

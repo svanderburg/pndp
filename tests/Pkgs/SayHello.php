@@ -3,7 +3,7 @@ namespace Pkgs;
 
 class SayHello
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		return $args->stdenv->mkDerivation(array(
 			"name" => "sayhello",

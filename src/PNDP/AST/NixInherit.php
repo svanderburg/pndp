@@ -8,14 +8,15 @@ namespace PNDP\AST;
  */
 class NixInherit extends NixObject
 {
-	public $scope;
+	/** Name of the scope or undefined to inherit from the current lexical scope */
+	public string $scope;
 
 	/**
 	 * Creates a new NixInherit instance.
 	 *
-	 * @param string $scope Name of the scope or undefined to inherit from the current lexical scope
+	 * @param $scope Name of the scope or undefined to inherit from the current lexical scope
 	 */
-	public function __construct($scope = "")
+	public function __construct(string $scope = "")
 	{
 		$this->scope = $scope;
 	}
@@ -23,7 +24,7 @@ class NixInherit extends NixObject
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		$expr = "inherit";
 
@@ -36,9 +37,10 @@ class NixInherit extends NixObject
 	/**
 	 * Checks whether this object is equal to another NixInherit object.
 	 *
-	 * @return bool true, if and only if, both objects have the same properties
+	 * @param $inherit Inherit object to compare to
+	 * @return true, if and only if, both objects have the same properties
 	 */
-	public function equals(NixInherit $inherit)
+	public function equals(NixInherit $inherit): bool
 	{
 		return $this->scope === $inherit->scope;
 	}

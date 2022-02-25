@@ -11,9 +11,9 @@ class NixStorePath extends NixFunInvocation
 	/**
 	 * Creates a new NixStorePath instance.
 	 *
-	 * @param string $value A sub expression referring to a Nix store file
+	 * @param $value A sub expression referring to a Nix store file
 	 */
-	public function __construct($value)
+	public function __construct(string $value)
 	{
 		parent::__construct(new NixExpression("builtins.storePath"), $value);
 	}

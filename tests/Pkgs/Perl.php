@@ -4,7 +4,7 @@ use PNDP\AST\NixExpression;
 
 class Perl
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		return new NixExpression("pkgs.perl");
 	}

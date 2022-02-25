@@ -9,9 +9,9 @@ class NixURL extends NixValue
 	/**
 	 * Creates a new NixURL instance.
 	 *
-	 * @param string $value Value containing a URL
+	 * @param $value Value containing a URL
 	 */
-	public function __construct($value)
+	public function __construct(string $value)
 	{
 		parent::__construct($value);
 	}
@@ -19,7 +19,7 @@ class NixURL extends NixValue
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		if(strpos($this->value, '#') === false)
 			return $this->value;

@@ -8,11 +8,12 @@ namespace PNDP\AST;
  */
 abstract class NixValue extends NixObject
 {
+	/** Value of the reference */
 	public $value;
 
 	/** Creates a new NixValue instance.
 	 *
-	 * @param mixed $value Value of the reference
+	 * @param $value Value of the reference
 	 */
 	public function __construct($value)
 	{

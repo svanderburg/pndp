@@ -6,12 +6,12 @@ use Pkgs\HelloModel\MetaDataWrapper;
 
 class HelloModel extends NixASTNode
 {
-	private $args;
-	private $name;
-	private $source;
-	private $meta;
+	private object $args;
+	private string $name;
+	private HelloSourceModel $source;
+	private array $meta;
 
-	public function __construct($args)
+	public function __construct(object $args)
 	{
 		$this->args = $args;
 
@@ -39,7 +39,7 @@ class HelloModel extends NixASTNode
 		));
 	}
 
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		return new HelloModel($args);
 	}

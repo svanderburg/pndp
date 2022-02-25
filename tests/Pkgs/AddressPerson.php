@@ -6,7 +6,7 @@ use PNDP\AST\NixFunInvocation;
 
 class AddressPerson
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		return $args->stdenv->mkDerivation(array(
 			"name" => "addressPerson",

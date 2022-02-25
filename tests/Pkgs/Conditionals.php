@@ -7,7 +7,7 @@ use PNDP\AST\NixLet;
 
 class Conditionals
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		return new NixAssert(true, new NixLet(array(
 			"test" => true

@@ -31,7 +31,7 @@ import (pkgs.stdenv.mkDerivation {
       $expr = new NixLet(array(
           "pkgs" => new NixFunInvocation(new NixImport(new NixStorePath('${nixpkgs}')), array("system" => '${system}')),
           "pndp" => new NixStorePath('${pndp}'),
-          "pndpInlineProxy" => new NixFunInvocation(new NixImport(new NixStorePath("${pndp}/src/PNDP/inlineProxy.nix")), array(
+          "pndpInlineProxy" => new NixFunInvocation(new NixImport(new NixStorePath("${pndp}/share/php/composer-svanderburg-pndp/src/PNDP/inlineProxy.nix")), array(
               "stdenv" => new NixInherit("pkgs"),
               "writeTextFile" => new NixInherit("pkgs"),
               "php" => new NixInherit("pkgs"),

@@ -10,10 +10,10 @@ abstract class NixObject
 	/**
 	 * Converts the Nix object to a string containing the equivalent Nix expression
 	 *
-	 * @param int $indentLevel The indentation level of the resulting sub expression
-	 * @param bool $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
-	 * @return string String with the equivalent Nix expression
+	 * @param $indentLevel The indentation level of the resulting sub expression
+	 * @param $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
+	 * @return String with the equivalent Nix expression
 	 */
-	public abstract function toNixExpr($indentLevel, $format);
+	public abstract function toNixExpr(int $indentLevel, bool $format): string;
 }
 ?>

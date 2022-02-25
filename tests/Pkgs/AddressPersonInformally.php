@@ -6,7 +6,7 @@ use PNDP\AST\NixLet;
 
 class AddressPersonInformally
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		return new NixLet(array(
 			"person" => array(

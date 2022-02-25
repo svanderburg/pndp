@@ -5,7 +5,7 @@ use PNDP\AST\NixFunInvocation;
 
 class WriteTextFile
 {
-	public static function composePackage($args, array $funArgs)
+	public static function composePackage(object $args, array $funArgs)
 	{
 		return new NixFunInvocation(new NixExpression("pkgs.writeTextFile"), $funArgs);
 	}

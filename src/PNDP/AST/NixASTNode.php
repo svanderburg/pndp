@@ -13,12 +13,13 @@ use PNDP\NixGenerator;
  */
 class NixASTNode extends NixObject implements NixASTConvertable
 {
-	protected $object;
+	/** Any object implementing the NixASTConvertable interface (optional) */
+	protected ?NixASTConvertable $object;
 
 	/**
 	 * Constructs a new NixAST instance.
 	 *
-	 * @param NixASTConvertable $object Any object implementing the NixASTConvertable interface (optional)
+	 * @param $object Any object implementing the NixASTConvertable interface (optional)
 	 */
 	public function __construct(NixASTConvertable $object = null)
 	{
@@ -36,7 +37,7 @@ class NixASTNode extends NixObject implements NixASTConvertable
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		return NixGenerator::phpToIndentedNix($this->toNixAST(), $indentLevel, $format);
 	}

@@ -9,18 +9,21 @@ use PNDP\NixGenerator;
  */
 class NixAttrReference extends NixObject
 {
+	/** An object representing an expression that yields an attribute set */
 	public $attrSetExpr;
 
+	/** An object representing an expression that yields an attribute name */
 	public $refExpr;
 
+	/** An optional object representing an expression that gets evaluated if the reference does not exist */
 	public $orExpr;
 
 	/**
 	 * Creates a new NixAttrReference instance.
 	 *
-	 * @param mixed $attrSetExpr An object representing an expression that yields an attribute set
-	 * @param mixed $refExpr An object representing an expression that yields an attribute name
-	 * @param mixed $orExpr An optional object representing an expression that gets evaluated if the reference does not exist.
+	 * @param $attrSetExpr An object representing an expression that yields an attribute set
+	 * @param $refExpr An object representing an expression that yields an attribute name
+	 * @param $orExpr An optional object representing an expression that gets evaluated if the reference does not exist
 	 */
 	public function __construct($attrSetExpr, $refExpr, $orExpr = null)
 	{
@@ -36,7 +39,7 @@ class NixAttrReference extends NixObject
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		/* Generate the sub expression that yields the attribute set */
 		$attrSetExprStr = NixGenerator::phpToIndentedNix($this->attrSetExpr, $indentLevel, $format);

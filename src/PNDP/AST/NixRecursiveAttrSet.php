@@ -10,7 +10,7 @@ class NixRecursiveAttrSet extends NixValue
 	/**
 	 * Creates a new NixRecursiveAttrSet instance.
 	 *
-	 * @param array $value An array that should be represented as a recursive attribute set
+	 * @param $value An array that should be represented as a recursive attribute set
 	 */
 	public function __construct(array $value)
 	{
@@ -20,7 +20,7 @@ class NixRecursiveAttrSet extends NixValue
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		if(count($this->value) == 0)
 			return "rec {}";

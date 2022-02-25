@@ -5,7 +5,7 @@ use PNDP\AST\NixURL;
 
 class Fetchurl
 {
-	public static function composePackage($args, array $funArgs)
+	public static function composePackage(object $args, array $funArgs)
 	{
 		/* Determine the component's name */
 

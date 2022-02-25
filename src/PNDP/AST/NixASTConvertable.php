@@ -11,7 +11,7 @@ interface NixASTConvertable
 	 * Returns a compound object that will be converted into a Nix
 	 * expression.
 	 *
-	 * @return mixed A composition of objects that can be converted into a Nix expression
+	 * @return A composition of objects that can be converted into a Nix expression
 	 */
 	public function toNixAST();
 }

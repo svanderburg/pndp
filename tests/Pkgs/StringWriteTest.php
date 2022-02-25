@@ -3,7 +3,7 @@ namespace Pkgs;
 
 class StringWriteTest
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		return $args->writeTextFile(array(
 			"name" => "stringWriteTest",

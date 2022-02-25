@@ -5,11 +5,11 @@ use PNDP\AST\NixURL;
 
 class HelloSourceModel extends NixASTNode
 {
-	private $args;
-	private $src;
-	private $sha256;
+	private object $args;
+	private string $src;
+	private string $sha256;
 
-	public function __construct($args)
+	public function __construct(object $args)
 	{
 		$this->args = $args;
 		$this->src = "mirror://gnu/hello/hello-2.10.tar.gz";

@@ -13,11 +13,11 @@ class NixGenerator
 	/**
 	 * Generates indentation to format the resulting output expression more nicely.
 	 *
-	 * @param int $indentLevel The indentation level of the resulting sub expression
-	 * @param bool $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
-	 * @return string A string with the amount of whitespaces corresponding to the indent level
+	 * @param $indentLevel The indentation level of the resulting sub expression
+	 * @param $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
+	 * @return A string with the amount of whitespaces corresponding to the indent level
 	 */
-	public static function generateIndentation($indentLevel, $format)
+	public static function generateIndentation(int $indentLevel, bool $format): string
 	{
 		if($format)
 		{
@@ -34,15 +34,15 @@ class NixGenerator
 	/**
 	 * Checks whether an array is associative.
 	 *
-	 * @param array $array Array to check
-	 * @return bool true is the array is associative, false if it is sequential
+	 * @param $array Array to check
+	 * @return true is the array is associative, false if it is sequential
 	 */
-	public static function isAssociativeArray(array $array)
+	public static function isAssociativeArray(array $array): bool
 	{
 		return($array !== array() && array_keys($array) !== range(0, count($array) - 1));
 	}
 
-	private static function isValidIdentifier($value)
+	private static function isValidIdentifier(string $value): bool
 	{
 		return (preg_match('/^[a-zA-Z\_][a-zA-Z0-9\_\'\-]*$/', $value) === 1
 			&& $value != "assert" && $value != "else"
@@ -53,12 +53,12 @@ class NixGenerator
 	/**
 	 * Converts an array to a Nix list.
 	 *
-	 * @param array $array Array to convert
-	 * @param int $indentLevel The indentation level of the resulting sub expression
-	 * @param bool $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
+	 * @param $array Array to convert
+	 * @param $indentLevel The indentation level of the resulting sub expression
+	 * @param $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
 	 * @return A string representing the corresponding Nix list
 	 */
-	public static function sequentialArrayToIndentedNix(array $array, $indentLevel, $format)
+	public static function sequentialArrayToIndentedNix(array $array, int $indentLevel, bool $format): string
 	{
 		if(count($array) == 0)
 			return "[]"; // Not strictly required, but printing an empty list like this is better than putting a newline between the brackets
@@ -84,7 +84,7 @@ class NixGenerator
 		}
 	}
 
-	private static function objectKeyToAttrName($key)
+	private static function objectKeyToAttrName(string $key): string
 	{
 		if(NixGenerator::isValidIdentifier($key))
 			return $key; // The key can be used as an identifier
@@ -95,12 +95,12 @@ class NixGenerator
 	/**
 	 * Converts members of an array to members of an attribute set
 	 *
-	 * @param array $array Array to convert
-	 * @param int $indentLevel The indentation level of the resulting sub expression
-	 * @param bool $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
-	 * @return string A string containing the Nix attribute set members
+	 * @param $array Array to convert
+	 * @param $indentLevel The indentation level of the resulting sub expression
+	 * @param $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
+	 * @return A string containing the Nix attribute set members
 	 */
-	public static function arrayMembersToAttrsMembers(array $array, $indentLevel, $format)
+	public static function arrayMembersToAttrsMembers(array $array, int $indentLevel, bool $format): string
 	{
 		$expr = "";
 
@@ -148,12 +148,12 @@ class NixGenerator
 	/**
 	 * Converts an array to a Nix attribute set.
 	 *
-	 * @param array $array Array to convert
-	 * @param int $indentLevel The indentation level of the resulting sub expression
-	 * @param bool $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
+	 * @param $array Array to convert
+	 * @param $indentLevel The indentation level of the resulting sub expression
+	 * @param $format Indicates whether to nicely format to expression (i.e. generating whitespaces) or not
 	 * @return A string representing the corresponding Nix list
 	 */
-	public static function associativeArrayToIndentedNix(array $array, $indentLevel, $format)
+	public static function associativeArrayToIndentedNix(array $array, int $indentLevel, bool $format): string
 	{
 		if(count($array) == 0)
 			return "{}"; // Not strictly required, but printing an empty attribute set like this is better that putting a newline between the braces
@@ -161,7 +161,7 @@ class NixGenerator
 			return "{\n".NixGenerator::arrayMembersToAttrsMembers($array, $indentLevel + 1, $format).NixGenerator::generateIndentation($indentLevel, $format)."}";
 	}
 
-	private static function arrayToIndentedNix(array $array, $indentLevel, $format)
+	private static function arrayToIndentedNix(array $array, int $indentLevel, bool $format): string
 	{
 		if(NixGenerator::isAssociativeArray($array))
 			return NixGenerator::associativeArrayToIndentedNix($array, $indentLevel, $format);
@@ -169,7 +169,7 @@ class NixGenerator
 			return NixGenerator::sequentialArrayToIndentedNix($array, $indentLevel, $format);
 	}
 
-	private static function objectToIndentedNix($obj, $indentLevel, $format)
+	private static function objectToIndentedNix($obj, int $indentLevel, bool $format): string
 	{
 		if($obj instanceof NixObject)
 			return $obj->toNixExpr($indentLevel, $format);
@@ -180,7 +180,7 @@ class NixGenerator
 		}
 	}
 
-	private static function booleanToIndentedNix($obj)
+	private static function booleanToIndentedNix(bool $obj): string
 	{
 		if($obj)
 			return "true";
@@ -188,7 +188,7 @@ class NixGenerator
 			return "false";
 	}
 
-	private static function stringToIndentedNix($obj)
+	private static function stringToIndentedNix(string $obj): string
 	{
 		return '"'.preg_replace(array('/\\\/', '/"/'), array('\\\\\\', '\"'), $obj).'"'; // escape " and / '
 	}
@@ -198,12 +198,12 @@ class NixGenerator
 	 * similar Nix expression language object. It also uses indentation to
 	 * format the resulting sub expression more nicely.
 	 *
-	 * @param mixed $obj A variable of any type
-	 * @param int $indentLevel Contains the indentation level
-	 * @param bool $format Indicates whether to nicely format the generated expression
-	 * @return string A string containing the converted Nix expression language object
+	 * @param $obj A variable of any type
+	 * @param $indentLevel Contains the indentation level
+	 * @param $format Indicates whether to nicely format the generated expression
+	 * @return A string containing the converted Nix expression language object
 	 */
-	public static function phpToIndentedNix($obj, $indentLevel, $format)
+	public static function phpToIndentedNix($obj, int $indentLevel, bool $format): string
 	{
 		$expr = "";
 
@@ -246,11 +246,11 @@ class NixGenerator
 	 * Converts a PHP variable of any type to a semantically equivalent or
 	 * similar Nix expression language object.
 	 *
-	 * @param mixed $obj A variable of any type
-	 * @param bool $format Indicates whether to nicely format the generated expression
-	 * @return string A string containing the converted Nix expression language object
+	 * @param $obj A variable of any type
+	 * @param $format Indicates whether to nicely format the generated expression
+	 * @return A string containing the converted Nix expression language object
 	 */
-	public static function phpToNix($obj, $format)
+	public static function phpToNix($obj, bool $format): string
 	{
 		return NixGenerator::phpToIndentedNix($obj, 0, $format);
 	}

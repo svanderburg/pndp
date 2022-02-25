@@ -3,9 +3,9 @@ namespace Pkgs\InstanceToXML;
 
 class DataClass
 {
-	public $hello;
+	public string $hello;
 
-	public $message;
+	public array $message;
 
 	public function __construct()
 	{

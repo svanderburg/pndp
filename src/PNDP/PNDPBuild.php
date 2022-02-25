@@ -7,7 +7,7 @@ use Exception;
  */
 class PNDPBuild
 {
-	public static function evaluatePackage($filename, $attr, $format)
+	public static function evaluatePackage(string $filename, string $attr, bool $format): string
 	{
 		require_once($filename);
 		$pkgs = new \Pkgs();
@@ -15,13 +15,13 @@ class PNDPBuild
 		return NixGenerator::phpToNix($pkg, $format);
 	}
 
-	public static function evaluatePHPFile($filename, $attr, $format)
+	public static function evaluatePHPFile(string $filename, string $attr, bool $format): void
 	{
 		$expr = PNDPBuild::evaluatePackage($filename, $attr, $format);
 		print($expr);
 	}
 
-	public static function nixBuild($expression, $params)
+	public static function nixBuild(string $expression, array $params): void
 	{
 		array_push($params, "-");
 
@@ -45,7 +45,7 @@ class PNDPBuild
 			throw new Exception("nix-build exited with status: ".$exitStatus);
 	}
 
-	public static function callNixBuild($nixExpression, $params, $pkgsExpression = null)
+	public static function callNixBuild(?string $nixExpression, array $params, string $pkgsExpression = null): void
 	{
 		if($pkgsExpression === null)
 			$pkgsExpression = "import <nixpkgs> {}";
@@ -72,14 +72,14 @@ class PNDPBuild
 		$expression = "let\n".
 			"  pkgs = ".$pkgsExpression.";\n".
 			"  pndp = ".$pndpPath.";\n".
-			'  pndpInlineProxy = import "${pndp}/src/PNDP/inlineProxy.nix" { inherit (pkgs) stdenv writeTextFile php; inherit pndp; };'."\n".
+			'  pndpInlineProxy = import "${pndp}/share/php/composer-svanderburg-pndp/src/PNDP/inlineProxy.nix" { inherit (pkgs) stdenv writeTextFile php; inherit pndp; };'."\n".
 			"in\n".
 			$nixExpression;
 
 		PNDPBuild::nixBuild($expression, $params);
 	}
 
-	public static function pndpBuild($filename, $attr, $format, $showTrace, $keepFailed, $outLink, $noOutLink)
+	public static function pndpBuild(string $filename, string $attr, bool $format, bool $showTrace, bool $keepFailed, ?string $outLink, bool $noOutLink): void
 	{
 		/* Compose parameters to nix-build */
 		$params = array();

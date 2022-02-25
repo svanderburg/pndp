@@ -7,18 +7,21 @@ use PNDP\NixGenerator;
  */
 class NixIf extends NixBlock
 {
+	/** An object representing an expression evaluating to a boolean */
 	public $ifExpr;
 
+	/** Expression that gets evaluated if the condition is true */
 	public $thenExpr;
 
+	/** Expression that gets evaluated if the condition is false */
 	public $elseExpr;
 
 	/**
 	 * Creates a new NixIf instance.
 	 *
-	 * @param mixed $ifExpr An object representing an expression evaluating to a boolean
-	 * @param mixed $thenExpr Expression that gets evaluated if the condition is true
-	 * @param mixed $elseExpr Expression that gets evaluated if the condition is false
+	 * @param $ifExpr An object representing an expression evaluating to a boolean
+	 * @param $thenExpr Expression that gets evaluated if the condition is true
+	 * @param $elseExpr Expression that gets evaluated if the condition is false
 	 */
 	public function __construct($ifExpr, $thenExpr, $elseExpr)
 	{
@@ -30,7 +33,7 @@ class NixIf extends NixBlock
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		return "if ".NixGenerator::phpToIndentedNix($this->ifExpr, $indentLevel, $format).
 			" then ".NixGenerator::phpToIndentedNix($this->thenExpr, $indentLevel, $format).

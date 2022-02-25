@@ -9,15 +9,17 @@ use PNDP\NixGenerator;
  */
 class NixMergeAttrs extends NixBlock
 {
+	/** An object yielding an attribute set */
 	public $left;
 
+	/** An object yielding an attribute set */
 	public $right;
 
 	/**
 	 * Creates a new NixMergeAttrs instance.
 	 *
-	 * @param mixed $left An object yielding an attribute set
-	 * @param mixed $right An object yielding an attribute set
+	 * @param $left An object yielding an attribute set
+	 * @param $right An object yielding an attribute set
 	 */
 	public function __construct($left, $right)
 	{
@@ -28,7 +30,7 @@ class NixMergeAttrs extends NixBlock
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		/* Generate the sub expression that yields the left attribute set */
 		$leftExpr = NixGenerator::phpToIndentedNix($this->left, $indentLevel, $format);

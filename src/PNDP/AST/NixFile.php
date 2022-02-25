@@ -10,14 +10,15 @@ use Exception;
  */
 class NixFile extends NixValue
 {
-	public $baseDir;
+	/** Path to the base directory where the file is stored so that a relative path can be resolved */
+	public string $baseDir;
 
 	/** Creates a new NixFile instance.
 	 *
-	 * @param string $value An absolute or relative path to a file
-	 * @param string $baseDir Path to the base directory where the file is stored so that a relative path can be resolved
+	 * @param $value An absolute or relative path to a file
+	 * @param $baseDir Path to the base directory where the file is stored so that a relative path can be resolved
 	 */
-	public function __construct($value, $baseDir = null)
+	public function __construct(string $value, string $baseDir = null)
 	{
 		parent::__construct($value);
 		$this->baseDir = $baseDir;
@@ -26,7 +27,7 @@ class NixFile extends NixValue
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		/*
 		 * If the path does not start with a / and a module is

@@ -4,7 +4,7 @@ use PNDP\AST\NixURL;
 
 class Hello
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		return $args->stdenv->mkDerivation(array(
 			"name" => "hello-2.10",

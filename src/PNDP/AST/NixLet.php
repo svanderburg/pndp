@@ -7,15 +7,17 @@ use PNDP\NixGenerator;
  */
 class NixLet extends NixBlock
 {
-	public $value;
+	/** An arbitrary object that should be represented as a let block. This object is stored as a reference. */
+	public array $value;
 
+	/** Body of the let block containing an expression that should get evaluated */
 	public $body;
 
 	/**
 	 * Creates a new NixLet instance.
 	 *
-	 * @param array $value An arbitrary object that should be represented as a let block. This object is stored as a reference.
-	 * @param mixed $body Body of the let block containing an expression that should get evaluated
+	 * @param $value An arbitrary object that should be represented as a let block. This object is stored as a reference.
+	 * @param $body Body of the let block containing an expression that should get evaluated
 	 */
 	public function __construct(array $value, $body)
 	{
@@ -26,7 +28,7 @@ class NixLet extends NixBlock
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		$indentation = NixGenerator::generateIndentation($indentLevel, $format);
 

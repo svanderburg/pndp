@@ -9,15 +9,17 @@ use PNDP\NixGenerator;
  */
 class NixFunInvocation extends NixBlock
 {
+	/** An object representing an expression that yields a function definition */
 	public $funExpr;
 
+	/** An object representing an expression that yields the function parameter */
 	public $paramExpr;
 
 	/**
 	 * Creates a new NixFunInvocation instance.
 	 *
-	 * @param mixed $funExpr An object representing an expression that yields a function definition
-	 * @param mixed $paramExpr An object representing an expression that yields the function parameter
+	 * @param $funExpr An object representing an expression that yields a function definition
+	 * @param $paramExpr An object representing an expression that yields the function parameter
 	 */
 	public function __construct($funExpr, $paramExpr)
 	{
@@ -28,7 +30,7 @@ class NixFunInvocation extends NixBlock
 	/**
 	 * @see NixObject::toNixExpr()
 	 */
-	public function toNixExpr($indentLevel, $format)
+	public function toNixExpr(int $indentLevel, bool $format): string
 	{
 		/* Generate the sub expression that yields the function definition */
 		$funExprStr = NixGenerator::phpToIndentedNix($this->funExpr, $indentLevel, $format);

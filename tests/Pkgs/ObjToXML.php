@@ -12,7 +12,7 @@ use PNDP\AST\NixRecursiveAttrSet;
 
 class ObjToXML
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		$data = array(
 			"number" => 1,

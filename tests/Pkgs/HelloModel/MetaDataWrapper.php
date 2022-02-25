@@ -5,7 +5,7 @@ use PNDP\AST\NixURL;
 
 class MetaDataWrapper implements NixASTConvertable
 {
-	private $meta;
+	private array $meta;
 
 	public function __construct(array $meta)
 	{

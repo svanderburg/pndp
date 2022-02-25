@@ -4,7 +4,7 @@ use PNDP\AST\NixURL;
 
 class Zlib
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		return $args->stdenv->mkDerivation(array(
 			"name" => "zlib-1.2.11",

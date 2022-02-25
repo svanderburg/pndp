@@ -4,7 +4,7 @@ use PNDP\AST\NixURL;
 
 class Curl
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		return $args->stdenv->mkDerivation(array(
 			"name" => "curl-7.69.1",

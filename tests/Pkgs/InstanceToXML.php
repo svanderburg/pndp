@@ -7,7 +7,7 @@ use Pkgs\InstanceToXML\DataClass;
 
 class InstanceToXML
 {
-	public static function composePackage($args)
+	public static function composePackage(object $args)
 	{
 		$dataObj = new DataClass();
 

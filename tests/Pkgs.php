@@ -10,7 +10,7 @@ class Pkgs
 
 	/* Manual compositions of packages */
 
-	public function fetchurl($args)
+	public function fetchurl(array $args)
 	{
 		return Pkgs\Fetchurl::composePackage($this, $args);
 	}
@@ -21,7 +21,7 @@ class Pkgs
 	}
 
 	/* Auto composition of arbitrary packages */
-	public function __call($name, $arguments)
+	public function __call(string $name, array $arguments)
 	{
 		// Compose the classname from the function name
 		$className = ucfirst($name);

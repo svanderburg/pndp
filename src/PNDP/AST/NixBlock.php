@@ -10,10 +10,10 @@ abstract class NixBlock extends NixObject
 	/**
 	 * Wraps an expression in a block within parenthesis.
 	 *
-	 * @param string $expr String containing a Nix expression block
-	 * @return string The same expression within parenthesis
+	 * @param $expr String containing a Nix expression block
+	 * @return The same expression within parenthesis
 	 */
-	public function wrapInParenthesis($expr)
+	public function wrapInParenthesis(string $expr): string
 	{
 		return "(".$expr.")";
 	}

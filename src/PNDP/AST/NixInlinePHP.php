@@ -10,9 +10,9 @@ class NixInlinePHP extends NixFunInvocation
 	/**
 	 * Creates a new NixInlinePHP instance.
 	 *
-	 * @param string $code
+	 * @param $code Embedded shell code
 	 */
-	public function __construct($code)
+	public function __construct(string $code)
 	{
 		parent::__construct(new NixExpression("pndpInlineProxy"), array("code" => $code));
 	}
