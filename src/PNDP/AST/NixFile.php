@@ -10,8 +10,8 @@ use Exception;
  */
 class NixFile extends NixValue
 {
-	/** Path to the base directory where the file is stored so that a relative path can be resolved */
-	public string $baseDir;
+	/** Path to the base directory where the file is stored so that a relative path can be resolved or null to never determine a relative path */
+	public ?string $baseDir;
 
 	/** Creates a new NixFile instance.
 	 *
