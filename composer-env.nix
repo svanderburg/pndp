@@ -4,6 +4,10 @@
 
 let
   inherit (phpPackages) composer;
+
+  filterSrc = src:
+    builtins.filterSource (path: type: type != "directory" || (baseNameOf path != ".git" && baseNameOf path != ".git" && baseNameOf path != ".svn")) src;
+
   buildZipPackage = { name, src }:
     stdenv.mkDerivation {
       inherit name src;
@@ -134,10 +138,9 @@ let
             ''}
           '') (builtins.attrNames dependencies);
 
-      extraArgs = removeAttrs args [ "name" "packages" "devPackages" "buildInputs" ];
+      extraArgs = removeAttrs args [ "packages" "devPackages" "buildInputs" ];
     in
     stdenv.mkDerivation ({
-      name = "composer-${name}";
       buildInputs = [ php composer ] ++ buildInputs;
 
       inherit unpackPhase buildPhase;
@@ -234,6 +237,7 @@ let
   } // extraArgs);
 in
 {
+  inherit filterSrc;
   composer = lib.makeOverridable composer;
   buildZipPackage = lib.makeOverridable buildZipPackage;
   buildPackage = lib.makeOverridable buildPackage;

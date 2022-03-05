@@ -7,7 +7,7 @@ in
 composerEnv.buildPackage {
   inherit packages devPackages noDev;
   name = "svanderburg-pndp";
-  src = ./.;
+  src = composerEnv.filterSrc ./.;
   executable = false;
   symlinkDependencies = false;
   meta = {
